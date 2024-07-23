@@ -21,7 +21,7 @@ data:
             regex: app
           - source_labels: [__meta_kubernetes_pod_container_port_number]
             action: keep
-            regex: '8080'
+            regex: '9090'
           - source_labels: [__meta_kubernetes_namespace]
             action: keep
             regex: argotest
