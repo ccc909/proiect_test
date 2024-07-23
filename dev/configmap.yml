@@ -8,13 +8,20 @@ data:
       scrape_interval: 15s
 
     scrape_configs:
-      - job_name: 'app'
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'app-deployment'
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
           - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
             regex: app
-          - source_labels: [__meta_kubernetes_pod_container_name]
+          - source_labels: [__meta_kubernetes_pod_container_port_number]
             action: keep
-            regex: appcontainer
+            regex: '8080'
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: argotest
