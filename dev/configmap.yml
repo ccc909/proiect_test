@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: argotest
+  namespace: default
 data:
   prometheus.yml: |
     global:
@@ -17,11 +17,12 @@ data:
             action: keep
             regex: app
           - source_labels: [__meta_kubernetes_pod_container_port_number]
-            target_label: __meta_kubernetes_pod_container_port_number
-            replacement: 9100
+            action: keep
+            regex: '8080'
           - source_labels: [__address__]
             target_label: __address__
-            replacement: ${1}
+            regex: (.*):.*
+            replacement: $1:9100
 
       - job_name: 'node-exporter'
         kubernetes_sd_configs:
