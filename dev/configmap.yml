@@ -12,8 +12,19 @@ data:
           - role: endpoints
             namespaces:
               names:
-                - argotest  # specify the correct namespace
+                - argotest
         relabel_configs:
           - source_labels: [__meta_kubernetes_service_name]
             regex: 'node-exporter'
+            action: keep
+
+      - job_name: 'app-service'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - argotest
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            regex: 'app-service'
             action: keep
