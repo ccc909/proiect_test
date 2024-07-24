@@ -9,31 +9,10 @@ data:
       scrape_interval: 15s
 
     scrape_configs:
-      - job_name: 'app'
-        kubernetes_sd_configs:
-          - role: pod
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_label_app]
-            action: keep
-            regex: app
-          - source_labels: [__meta_kubernetes_pod_container_port_number]
-            action: keep
-            regex: '8080'
-          - source_labels: [__address__]
-            target_label: __address__
-            regex: (.*):.*
-            replacement: $1:9100
-
       - job_name: 'node-exporter'
         kubernetes_sd_configs:
-          - role: pod
+          - role: endpoints
         relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_label_k8s_app]
-            action: keep
-            regex: node-exporter
-          - source_labels: [__meta_kubernetes_pod_container_port_number]
-            action: keep
-            regex: '9100'
-          - source_labels: [__address__]
-            target_label: __address__
-            replacement: ${1}
+        - source_labels: [__meta_kubernetes_endpoints_name]
+          regex: 'node-exporter'
+          action: keep
