@@ -4,22 +4,21 @@ metadata:
   name: node-exporter
   namespace: argotest
   labels:
-    k8s-app: node-exporter
+    app: node-exporter
 spec:
   selector:
     matchLabels:
-      k8s-app: node-exporter
+      app: node-exporter
   template:
     metadata:
       labels:
-        k8s-app: node-exporter
+        app: node-exporter
     spec:
       containers:
       - name: node-exporter
-        image: prom/node-exporter:v1.6.0
+        image: prom/node-exporter
         ports:
         - containerPort: 9100
-          hostPort: 9100
           protocol: TCP
         resources:
           requests:
